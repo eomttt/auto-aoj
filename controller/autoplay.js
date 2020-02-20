@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 const URL = 'https://artofjiujitsu.com/';
 const URL_PLAYING = 'https://artofjiujitsu.com/academy-library/?filters=1&categories=competition,seminars,sparring';
 
-const authInfo = require('../auth.config');
+const info = require('../auth.config');
 
 const play = async () => {
   const browser = await puppeteer.launch({
@@ -17,6 +17,7 @@ const play = async () => {
   });
 
   try {
+      const { ID, PASSWORD } = authInfo;
       await page.goto(URL);
       await page.waitFor(1000);
       
