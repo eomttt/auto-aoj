@@ -11,6 +11,7 @@ const autoPlayer = require('./controller/autoplay');
 
 console.log('Process node version', process.version);
 autoPlayer.play();
+// autoPlayer.test();
 // router.get('/autoplay', () => {
 //   console.log("AAA")
 //   autoPlayer.play();
