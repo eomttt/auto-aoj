@@ -61,19 +61,9 @@ const play = async () => {
       const video = await frame.$eval('#vzaar-media-player', el =>
         Array.from(el.getElementsByTagName('video')).map(e => e.getAttribute("src")
       ));
-      
 
-      // await frame.waitForSelector('#vzaar-media-player > .vzaar-player-wrapper > .video-js > video');
-      // const src = await frame.$('#vzaar-media-player > .vzaar-player-wrapper > .video-js > video');
-      // const tt = await frame.$('#vzaar-media-player > .vzaar-player-wrapper > .video-js > #vzaarvid_html5_api');
-      // console.log('tt', tt);
-  
-      // await page.waitForSelector('iframe');
-      // const elementHandle = await page.$('#wrapper > main > .slideshow > .mask > .slideset > .slide > .video > iframe');
-      // console.log('elementHandle', elementHandle);
-      // const frame = await elementHandle.contentFrame();
-      // await frame.waitForSelector('#vzaar-media-player > .vzaar-player-wrapper > .video-js > video');
-      // const res = await frame$('#vzaar-media-player > .vzaar-player-wrapper > .video-js > video');
+      await page.goto(video[0]);
+      
       console.log("RES", video[0]);
       
       return 'Success'
