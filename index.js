@@ -21,9 +21,13 @@ app.use('/', function (req, res) {
   res.send('index.html');
 });
 
-router.get('/autoplay', () => {
-  console.log("AAA")
-  autoPlayer.play();
+router.get('/autoplay', async (req, res) => {
+  try {
+    const link = await autoPlayer.getLink();
+    res.send(link);
+  } catch (error) {
+    console.log('Auto play error', error);
+  }
 });
 
 app.listen(8080, () => {

@@ -7,7 +7,7 @@ const URL_VIDEO_LINK = 'https://artofjiujitsu.com/library/professor-gui-sparring
 
 const info = require('../auth.config');
 
-const play = async () => {
+const getLink = async () => {
   let pageOffset = 1;
   let videoOffset = 1;
 
@@ -61,12 +61,8 @@ const play = async () => {
       const video = await frame.$eval('#vzaar-media-player', el =>
         Array.from(el.getElementsByTagName('video')).map(e => e.getAttribute("src")
       ));
-
-      await page.goto(video[0]);
       
-      console.log("RES", video[0]);
-      
-      return 'Success'
+      return video[0]; 
   } catch (error) {
       console.log('Error', error);
   } finally {
@@ -114,5 +110,5 @@ const playVide = async (link = URL_VIDEO_LINK) => {
   });
 };
 
-module.exports.play = play;
+module.exports.getLink = getLink;
 module.exports.test = test;

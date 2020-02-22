@@ -9,15 +9,41 @@
       </button>
     </div>
     <script>
+      var VIDEO_TIMEOUT = 240000;
+      var MAX_VIDEO_OFFSET = 25;
+      var MAX_PAGE_OFFSET = 25;
+
       function send() {
-        function reqListener (tt) {
-          console.log(tt);
+        var httpRequest = new XMLHttpRequest();
+        function reqListener () {
+          if (httpRequest.readyState == 4) {
+            if (httpRequest.status == 200) {
+              var videoLink = httpRequest.responseText;
+              var openedWindow = window.open(videoLink, '_parent');
+              openedWindow.addEventListener('load', function() {
+                console.log("BBB");
+                var video = document.getElementsByTagName('video')[0];
+
+                video.onended = function(e) {
+                  console.log("AAA");
+                };
+              }, false)
+              // setTimeout(() => {
+              //   openedWindow.close();
+              //   getUrl();
+              // }, VIDEO_TIMEOUT);
+            } else { 
+              alert("실패: " + httpRequest.status);
+            }
+          }
         }
 
-        var oReq = new XMLHttpRequest();
-        oReq.addEventListener("load", reqListener);
-        oReq.open("GET", "http://localhost:8080/api/autoplay");
-        oReq.send();
+        function getUrl() {
+          httpRequest.onreadystatechange = reqListener;
+          httpRequest.open("GET", "http://localhost:8080/api/autoplay");
+          httpRequest.send();
+        }
+        getUrl();
       }
     </script>
   </body>
