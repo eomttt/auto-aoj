@@ -5,22 +5,25 @@ const autoPlayer = require('./controller/autoplay');
 
 const app = express();
 const router = express.Router();
+
+console.log('Process node version', process.version);
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 app.use(bodyParser.raw());
+app.set('views', __dirname + '/views');
 
-console.log('Process node version', process.version);
-// autoPlayer.play();
-// autoPlayer.test();
-router.get('/autoplay', () => {
-  console.log("AAA")
-  // autoPlayer.play();
+// 기본 path를 /public으로 설정(css, javascript 등의 파일 사용을 위해)
+app.use(express.static(__dirname + '/public'));
+
+app.use('/api', router);
+app.use('/', function (req, res) {
+  res.send('index.html');
 });
 
-app.use('/api', router)
-
-app.use('/', function (req, res) {
-  res.send('Express server running.');
+router.get('/autoplay', () => {
+  console.log("AAA")
+  autoPlayer.play();
 });
 
 app.listen(8080, () => {

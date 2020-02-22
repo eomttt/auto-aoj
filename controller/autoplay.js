@@ -70,7 +70,7 @@ const play = async () => {
   } catch (error) {
       console.log('Error', error);
   } finally {
-      // browser.close();
+      browser.close();
   }
 };
 

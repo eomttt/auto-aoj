@@ -3,10 +3,15 @@
 
   </head>
   <body>
+    <div>
+      <button onclick="send()">
+        자동 재생 시작
+      </button>
+    </div>
     <script>
       function send() {
-        function reqListener () {
-          console.log(this.responseText);
+        function reqListener (tt) {
+          console.log(tt);
         }
 
         var oReq = new XMLHttpRequest();
@@ -14,8 +19,6 @@
         oReq.open("GET", "http://localhost:8080/api/autoplay");
         oReq.send();
       }
-
-      send();
     </script>
   </body>
 </html>
