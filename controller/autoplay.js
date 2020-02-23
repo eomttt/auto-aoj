@@ -1,16 +1,13 @@
 const puppeteer = require('puppeteer');
 
 const URL = 'https://artofjiujitsu.com/';
-const URL_PLAYING = 'https://artofjiujitsu.com/academy-library/?filters=1&categories=competition,seminars,sparring&instructors=rafael-mendes,gui-mendes&pager=1';
+const URL_PLAYING = 'https://artofjiujitsu.com/academy-library/?filters=1&categories=sparring';
 
 const URL_VIDEO_LINK = 'https://artofjiujitsu.com/library/professor-gui-sparring-aoj-purple-belt-2-18-2020/';
 
 const info = require('../auth.config');
 
-const getLink = async () => {
-  let pageOffset = 1;
-  let videoOffset = 1;
-
+const getLink = async (pageOffset, videoOffset) => {
   const browser = await puppeteer.launch({
     headless: false,
     defaultViewport: { width : 1227, height : 1636 },
@@ -42,7 +39,7 @@ const getLink = async () => {
       await page.click('#wrapper > #header > .holder > .nav-drop > #nav > #menu-item-1008 > #modalLogin > .modal-body > #login-form > .form-group > #sign-in-btn');
       await page.waitFor(1000);
 
-      await page.goto(URL_PLAYING);
+      await page.goto(`${URL_PLAYING}&pager=${pageOffset}`);
 
       const articleList = await page.evaluate(() => {
         const articles = Array.from(document.querySelectorAll('#wrapper > main > #archive-plug > .container > #archive-plug-posts > .grid-item > .entry-thumbnail > a'))
@@ -53,7 +50,7 @@ const getLink = async () => {
 
       await page.waitFor(1000);
 
-      await page.goto(articleList[0]);
+      await page.goto(articleList[videoOffset - 1]);
       await page.waitForSelector('#wrapper > main > .slideshow > .mask > .slideset > .slide > .video > iframe');
       const elementHandle = await page.$('#wrapper > main > .slideshow > .mask > .slideset > .slide > .video > iframe');
       const frame = await elementHandle.contentFrame();

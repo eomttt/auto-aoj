@@ -23,7 +23,8 @@ app.use('/', function (req, res) {
 
 router.get('/autoplay', async (req, res) => {
   try {
-    const link = await autoPlayer.getLink();
+    const { page, video } = req.query;
+    const link = await autoPlayer.getLink(page, video);
     res.send(link);
   } catch (error) {
     console.log('Auto play error', error);

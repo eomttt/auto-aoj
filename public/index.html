@@ -11,7 +11,10 @@
     <script>
       var VIDEO_TIMEOUT = 240000;
       var MAX_VIDEO_OFFSET = 25;
-      var MAX_PAGE_OFFSET = 25;
+      var MAX_PAGE_OFFSET = 24;
+
+      var pageOffSet = 1,
+          videoOffset = 1;
 
       function send() {
         var httpRequest = new XMLHttpRequest();
@@ -19,19 +22,22 @@
           if (httpRequest.readyState == 4) {
             if (httpRequest.status == 200) {
               var videoLink = httpRequest.responseText;
-              var openedWindow = window.open(videoLink, '_parent');
-              openedWindow.addEventListener('load', function() {
-                console.log("BBB");
-                var video = document.getElementsByTagName('video')[0];
+              var openedWindow = window.open(videoLink, '_blank');
+              setTimeout(() => {
+                videoOffset += 1;
+                openedWindow.close();
 
-                video.onended = function(e) {
-                  console.log("AAA");
-                };
-              }, false)
-              // setTimeout(() => {
-              //   openedWindow.close();
-              //   getUrl();
-              // }, VIDEO_TIMEOUT);
+                if (videoOffset > MAX_VIDEO_OFFSET) {
+                  pageOffSet += 1;
+                  videoOffset = 1;
+                }
+
+                if (pageOffSet === MAX_PAGE_OFFSET) {
+                  pageOffSet = 1;
+                  videoOffset = 1;
+                }
+                getUrl();
+              }, VIDEO_TIMEOUT);
             } else { 
               alert("실패: " + httpRequest.status);
             }
@@ -40,7 +46,7 @@
 
         function getUrl() {
           httpRequest.onreadystatechange = reqListener;
-          httpRequest.open("GET", "http://localhost:8080/api/autoplay");
+          httpRequest.open("GET", "http://localhost:8080/api/autoplay?" + "page=" + pageOffSet + "&video=" + videoOffset);
           httpRequest.send();
         }
         getUrl();
