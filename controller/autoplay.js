@@ -9,7 +9,7 @@ const info = require('../auth.config');
 
 const getLink = async (pageOffset, videoOffset) => {
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
     defaultViewport: { width : 1227, height : 1636 },
     args: [
       '--disable-web-security',
@@ -23,6 +23,7 @@ const getLink = async (pageOffset, videoOffset) => {
   });
 
   try {
+      console.log('Start');
       const { ID, PASSWORD } = info;
       await page.goto(URL);
       await page.waitFor(1000);
@@ -38,9 +39,11 @@ const getLink = async (pageOffset, videoOffset) => {
 
       await page.click('#wrapper > #header > .holder > .nav-drop > #nav > #menu-item-1008 > #modalLogin > .modal-body > #login-form > .form-group > #sign-in-btn');
       await page.waitFor(1000);
+      console.log('Login');
 
       await page.goto(`${URL_PLAYING}&pager=${pageOffset}`);
-
+      await page.waitFor(1000);
+      console.log('Open video list');
       const articleList = await page.evaluate(() => {
         const articles = Array.from(document.querySelectorAll('#wrapper > main > #archive-plug > .container > #archive-plug-posts > .grid-item > .entry-thumbnail > a'))
         return articles.map((article) => {
@@ -48,9 +51,11 @@ const getLink = async (pageOffset, videoOffset) => {
         });
       });
 
-      await page.waitFor(1000);
-
+      console.log('Video page link', articleList[videoOffset - 1]);
+      
       await page.goto(articleList[videoOffset - 1]);
+      await page.waitFor(1000);
+      console.log('Open video page');
       await page.waitForSelector('#wrapper > main > .slideshow > .mask > .slideset > .slide > .video > iframe');
       const elementHandle = await page.$('#wrapper > main > .slideshow > .mask > .slideset > .slide > .video > iframe');
       const frame = await elementHandle.contentFrame();
@@ -58,6 +63,8 @@ const getLink = async (pageOffset, videoOffset) => {
       const video = await frame.$eval('#vzaar-media-player', el =>
         Array.from(el.getElementsByTagName('video')).map(e => e.getAttribute("src")
       ));
+
+      console.log('video link', video[0]);
       
       return video[0]; 
   } catch (error) {

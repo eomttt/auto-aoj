@@ -3,11 +3,21 @@
 
   </head>
   <body>
-    <div>
-      <button onclick="send()">
-        자동 재생 시작
-      </button>
+    <style>
+      iframe {
+        width: 100%;
+        height: 90%;
+      }
+    </style>
+    <input placeholder="Page number" id="pageNum" type="number"/>
+    <input placeholder="Video number" id="videoNum" type="number"/>
+    <button onclick="send()">
+      자동 재생 시작
+    </button>
+    <div id="isStarted">
+      시작 버튼을 누르세요
     </div>
+    <iframe id="iframeVideo" allow="autoplay;"></iframe>
     <script>
       var VIDEO_TIMEOUT = 240000;
       var MAX_VIDEO_OFFSET = 25;
@@ -15,18 +25,19 @@
 
       var pageOffSet = 1,
           videoOffset = 1;
-
+          
       function send() {
         var httpRequest = new XMLHttpRequest();
+
         function reqListener () {
+          console.log('httpRequest', httpRequest)
           if (httpRequest.readyState == 4) {
             if (httpRequest.status == 200) {
               var videoLink = httpRequest.responseText;
-              var openedWindow = window.open(videoLink, '_blank');
+              document.getElementById("isStarted").innerText = "재생 중...";
+              document.getElementById("iframeVideo").src = videoLink;
               setTimeout(() => {
                 videoOffset += 1;
-                openedWindow.close();
-
                 if (videoOffset > MAX_VIDEO_OFFSET) {
                   pageOffSet += 1;
                   videoOffset = 1;
@@ -45,8 +56,24 @@
         }
 
         function getUrl() {
+          var pageInputVal = document.getElementById("pageNum").value,
+              videoInputVal = document.getElementById("videoNum").value;
+      
+          if (pageInputVal) {
+            pageOffSet = pageInputVal;
+          }
+          if (videoInputVal) {
+            videoOffset = videoInputVal;
+          }
+
+          document.getElementById("isStarted").innerText = "동영상 가져오는 중...";
+
+          console.log('Get video url');
+          console.log('Page offset', pageOffSet);
+          console.log('Video offset', videoOffset);
+
           httpRequest.onreadystatechange = reqListener;
-          httpRequest.open("GET", "http://localhost:8080/api/autoplay?" + "page=" + pageOffSet + "&video=" + videoOffset);
+          httpRequest.open("GET", "http://localhost:5000/api/autoplay?" + "page=" + pageOffSet + "&video=" + videoOffset);
           httpRequest.send();
         }
         getUrl();
