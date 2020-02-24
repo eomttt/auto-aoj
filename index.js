@@ -33,5 +33,5 @@ router.get('/autoplay', async (req, res) => {
 });
 
 app.listen(PORT || 5000, () => {
-  console.log(`Express server is running on http://localhost:${PORT || 8000}`);
+  console.log(`Express server is running on http://localhost:${PORT || 5000}`);
 });

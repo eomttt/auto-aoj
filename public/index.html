@@ -73,7 +73,7 @@
           console.log('Video offset', videoOffset);
 
           httpRequest.onreadystatechange = reqListener;
-          httpRequest.open("GET", "http://localhost:5000/api/autoplay?" + "page=" + pageOffSet + "&video=" + videoOffset);
+          httpRequest.open("GET", "/api/autoplay?" + "page=" + pageOffSet + "&video=" + videoOffset);
           httpRequest.send();
         }
         getUrl();
