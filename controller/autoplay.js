@@ -34,6 +34,9 @@ const getLink = async (pageOffset, videoOffset) => {
       const ID = process.env.EMAIL;
       const PASSWORD = process.env.PASS;
 
+      console.log('ID', ID);
+      console.log('PASS', PASSWORD);
+
       await page.goto(URL);
       await page.waitFor(1000);
       
