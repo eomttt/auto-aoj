@@ -5,6 +5,7 @@ const autoPlayer = require('./controller/autoplay');
 
 const app = express();
 const router = express.Router();
+const PORT = process.env.PORT;
 
 console.log('Process node version', process.version);
 
@@ -31,6 +32,6 @@ router.get('/autoplay', async (req, res) => {
   }
 });
 
-app.listen(5000, () => {
-  console.log('Express server is running on http://localhost:5000');
+app.listen(PORT || 5000, () => {
+  console.log(`Express server is running on http://localhost:${PORT || 8000}`);
 });

@@ -5,12 +5,13 @@ const URL_PLAYING = 'https://artofjiujitsu.com/academy-library/?filters=1&catego
 
 const URL_VIDEO_LINK = 'https://artofjiujitsu.com/library/professor-gui-sparring-aoj-purple-belt-2-18-2020/';
 
-const info = require('../auth.config');
+// const info = require('../auth.config');
 
 const getLink = async (pageOffset, videoOffset) => {
+  // launch Options
+  // defaultViewport: { width : 1227, height : 1636 },
   const browser = await puppeteer.launch({
     headless: true,
-    defaultViewport: { width : 1227, height : 1636 },
     args: [
       '--disable-web-security',
       '--disable-features=IsolateOrigins,site-per-process'
@@ -24,7 +25,13 @@ const getLink = async (pageOffset, videoOffset) => {
 
   try {
       console.log('Start');
-      const { ID, PASSWORD } = info;
+      // Dev
+      // const { ID, PASSWORD } = info;
+
+      // Public
+      const ID = process.env.EMAIL;
+      const PASSWORD = process.env.PASS;
+
       await page.goto(URL);
       await page.waitFor(1000);
       
