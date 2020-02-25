@@ -5,6 +5,7 @@ const autoPlayer = require('./controller/autoplay');
 
 const app = express();
 const router = express.Router();
+const path = require('path');
 const PORT = process.env.PORT;
 
 console.log('Process node version', process.version);
@@ -16,6 +17,8 @@ app.set('views', __dirname + '/views');
 
 // 기본 path를 /public으로 설정(css, javascript 등의 파일 사용을 위해)
 app.use(express.static(__dirname + '/public'));
+app.use('/lib', express.static(__dirname + '/lib/'));
+app.use('/node_modules', express.static(__dirname + '/node_modules/'));
 
 app.use('/api', router);
 app.use('/', function (req, res) {

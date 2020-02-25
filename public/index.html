@@ -1,8 +1,13 @@
+<!DOCTYPE html>
 <html>
   <head>
     <meta name="viewport" content="width=device-width, user-scalable=no">
   </head>
   <body>
+    <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
+    <!-- <link href="https://unpkg.com/video.js@6.11.0/dist/video-js.min.css" rel="stylesheet"> -->
+    <link href="/lib/videojs-resolution-switcher.css" rel="stylesheet" type="text/css">
+    <!-- <link href="https://cdn.jsdelivr.net/npm/videojs-resolution-switcher-v6@0.6.0/lib/videojs-resolution-switcher.css" rel="stylesheet"> -->
     <style>
       iframe {
         width: 100%;
@@ -17,7 +22,22 @@
     <div id="isStarted">
       시작 버튼을 누르세요
     </div>
-    <iframe id="iframeVideo" allow="autoplay;"></iframe>
+
+    <video id="player" class="video-js vjs-default-skin" width="700" controls data-setup='{}' muted>
+      <source src="https://vjs.zencdn.net/v/oceans.mp4?480" type='video/mp4' label='SD' res='480' />
+      <source src="https://vjs.zencdn.net/v/oceans.mp4?1080" type='video/mp4' label='HD' res='1080'/>
+      <source src="https://vjs.zencdn.net/v/oceans.mp4?144" type='video/mp4' label='phone' res='144'/>
+      <source src="https://vjs.zencdn.net/v/oceans.mp4?2160" type='video/mp4' label='4k' res='2160'/>
+    </video>
+    <script type='text/javascript' src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
+    <!-- <script src="https://unpkg.com/video.js@6.11.0/dist/video.min.js"></script> -->
+    <script type='text/javascript' src="/lib/videojs-resolution-switcher.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/videojs-resolution-switcher-v6@0.6.0/lib/videojs-resolution-switcher.min.js"></script> -->
+
+   <script>
+     videojs('player').videoJsResolutionSwitcher()
+   </script>
+
     <script>
       var VIDEO_TIMEOUT = 240000;
       var MAX_VIDEO_OFFSET = 25;
@@ -27,7 +47,6 @@
           videoOffset = 1;
       
       var timer = null;
-
       function clickStart() {
         if (timer) {
           clearTimeout(timer);
