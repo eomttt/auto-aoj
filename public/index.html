@@ -11,7 +11,7 @@
     </style>
     <input placeholder="Page number" id="pageNum" type="number"/>
     <input placeholder="Video number" id="videoNum" type="number"/>
-    <button onclick="send()">
+    <button onclick="clickStart()">
       자동 재생 시작
     </button>
     <div id="isStarted">
@@ -25,6 +25,17 @@
 
       var pageOffSet = 1,
           videoOffset = 1;
+      
+      var timer = null;
+
+      function clickStart() {
+        if (timer) {
+          clearTimeout(timer);
+          timer = null;
+        }
+
+        send();
+      }
           
       function send() {
         var httpRequest = new XMLHttpRequest();
@@ -36,7 +47,7 @@
               var videoLink = httpRequest.responseText;
               document.getElementById("isStarted").innerText = "재생 중...";
               document.getElementById("iframeVideo").src = videoLink;
-              setTimeout(() => {
+              timer = setTimeout(() => {
                 videoOffset += 1;
                 if (videoOffset > MAX_VIDEO_OFFSET) {
                   pageOffSet += 1;
@@ -76,6 +87,7 @@
           httpRequest.open("GET", "/api/autoplay?" + "page=" + pageOffSet + "&video=" + videoOffset);
           httpRequest.send();
         }
+
         getUrl();
       }
     </script>
