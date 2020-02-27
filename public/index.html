@@ -5,13 +5,14 @@
   </head>
   <body>
     <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
-    <!-- <link href="https://unpkg.com/video.js@6.11.0/dist/video-js.min.css" rel="stylesheet"> -->
     <link href="/lib/videojs-resolution-switcher.css" rel="stylesheet" type="text/css">
-    <!-- <link href="https://cdn.jsdelivr.net/npm/videojs-resolution-switcher-v6@0.6.0/lib/videojs-resolution-switcher.css" rel="stylesheet"> -->
     <style>
       iframe {
         width: 100%;
         height: 90%;
+      }
+      #player {
+        width: 100%;
       }
     </style>
     <input placeholder="Page number" id="pageNum" type="number"/>
@@ -23,23 +24,17 @@
       시작 버튼을 누르세요
     </div>
 
-    <video id="player" class="video-js vjs-default-skin" width="700" controls data-setup='{}' muted>
-      <source src="https://vjs.zencdn.net/v/oceans.mp4?480" type='video/mp4' label='SD' res='480' />
-      <source src="https://vjs.zencdn.net/v/oceans.mp4?1080" type='video/mp4' label='HD' res='1080'/>
-      <source src="https://vjs.zencdn.net/v/oceans.mp4?144" type='video/mp4' label='phone' res='144'/>
-      <source src="https://vjs.zencdn.net/v/oceans.mp4?2160" type='video/mp4' label='4k' res='2160'/>
+    <video id="player" class="video-js vjs-default-skin" width="700" autoplay>
     </video>
     <script type='text/javascript' src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
-    <!-- <script src="https://unpkg.com/video.js@6.11.0/dist/video.min.js"></script> -->
     <script type='text/javascript' src="/lib/videojs-resolution-switcher.js"></script>
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/videojs-resolution-switcher-v6@0.6.0/lib/videojs-resolution-switcher.min.js"></script> -->
 
    <script>
-     videojs('player').videoJsResolutionSwitcher()
+      // setVideo();
    </script>
 
     <script>
-      var VIDEO_TIMEOUT = 240000;
+      var VIDEO_TIMEOUT = 250000;
       var MAX_VIDEO_OFFSET = 25;
       var MAX_PAGE_OFFSET = 24;
 
@@ -47,6 +42,7 @@
           videoOffset = 1;
       
       var timer = null;
+
       function clickStart() {
         if (timer) {
           clearTimeout(timer);
@@ -54,6 +50,33 @@
         }
 
         send();
+      }
+
+      function setVideo(videoLink) {
+        videojs('player', {
+          controls: true,
+          plugins: {
+              videoJsResolutionSwitcher: {
+                default: 'high',
+                dynamicLabel: true
+              }
+            }
+        }, function(){
+          const player = this;
+          console.log('player', player);
+          // Add dynamically sources via updateSrc method
+          player.updateSrc([
+              {
+                src: videoLink,
+                type: 'video/mp4',
+                label: '144'
+              }
+            ])
+            player.on('resolutionchange', function(){
+              console.info('Source changed to %s', player.src())
+            })
+            
+        })
       }
           
       function send() {
@@ -65,7 +88,8 @@
             if (httpRequest.status == 200) {
               var videoLink = httpRequest.responseText;
               document.getElementById("isStarted").innerText = "재생 중...";
-              document.getElementById("iframeVideo").src = videoLink;
+              setVideo(videoLink);
+
               timer = setTimeout(() => {
                 videoOffset += 1;
                 if (videoOffset > MAX_VIDEO_OFFSET) {

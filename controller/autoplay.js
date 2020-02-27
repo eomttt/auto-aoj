@@ -68,6 +68,7 @@ const getLink = async (pageOffset, videoOffset) => {
       await page.goto(articleList[videoOffset - 1]);
       await page.waitFor(1000);
       console.log('Open video page');
+
       await page.waitForSelector('#wrapper > main > .slideshow > .mask > .slideset > .slide > .video > iframe');
       const elementHandle = await page.$('#wrapper > main > .slideshow > .mask > .slideset > .slide > .video > iframe');
       const frame = await elementHandle.contentFrame();
@@ -75,10 +76,12 @@ const getLink = async (pageOffset, videoOffset) => {
       const video = await frame.$eval('#vzaar-media-player', el =>
         Array.from(el.getElementsByTagName('video')).map(e => e.getAttribute("src")
       ));
-
       console.log('video link', video[0]);
+
+      await page.goto(video[0]);
+      console.log('AAA', page.url());
       
-      return video[0]; 
+      return page.url(); 
   } catch (error) {
       console.log('Error', error);
   } finally {
