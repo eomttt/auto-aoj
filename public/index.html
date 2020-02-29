@@ -2,6 +2,7 @@
 <html>
   <head>
     <meta name="viewport" content="width=device-width, user-scalable=no">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
   </head>
   <body>
     <link href="//vjs.zencdn.net/7.3.0/video-js.min.css" rel="stylesheet">
@@ -24,14 +25,15 @@
       시작 버튼을 누르세요
     </div>
 
-    <video id="player" class="video-js vjs-default-skin" width="700" autoplay>
-    </video>
+    <iframe id="videoIframe"></iframe>
+    <!-- <video id="player" class="video-js vjs-default-skin" width="700" autoplay> -->
+    <!-- </video> -->
     <script type='text/javascript' src="//vjs.zencdn.net/7.3.0/video.min.js"></script>
     <script type='text/javascript' src="/lib/videojs-resolution-switcher.js"></script>
 
    <script>
-      // setVideo();
-   </script>
+     document.getElementById('videoIframe').style.height = window.innerHeight * 0.8 + 'px';
+    </script>
 
     <script>
       var VIDEO_TIMEOUT = 250000;
@@ -89,7 +91,8 @@
             if (httpRequest.status == 200) {
               var videoLink = httpRequest.responseText;
               document.getElementById("isStarted").innerText = "재생 중...";
-              setVideo(videoLink);
+              document.getElementById('videoIframe').src = videoLink;
+              // setVideo(videoLink);
 
               timer = setTimeout(() => {
                 videoOffset += 1;

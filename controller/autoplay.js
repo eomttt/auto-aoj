@@ -78,6 +78,7 @@ const getLink = async (pageOffset, videoOffset) => {
       ));
       console.log('video link', video[0]);
 
+
       await page.goto(video[0]);
       console.log('AAA', page.url());
       
